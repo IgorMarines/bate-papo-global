@@ -4,6 +4,8 @@ import { getAuth, signOut } from 'firebase/auth';
 import { getDatabase, ref, onValue, push } from 'firebase/database';
 import { app } from '../../services/Firebase';
 
+import Swal from 'sweetalert2'
+
 const Chat = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
@@ -36,10 +38,18 @@ const Chat = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        console.log('Usuário deslogado!');
+        Swal.fire(
+          'Deslogado!',
+          'Você foi desconectado com sucesso!',
+          'success'
+        )
       })
       .catch((error) => {
-        console.error(error);
+        Swal.fire(
+          'Erro ao deslogar!',
+          error.message,
+          'error'
+        )
       });
   };
 
@@ -64,8 +74,6 @@ const Chat = () => {
     // Preenche com zeros à esquerda para garantir 6 dígitos
     return '#' + '0'.repeat(6 - randomColor.length) + randomColor;
   }
-
-  console.log(user)
 
   return (
     <S.Container>

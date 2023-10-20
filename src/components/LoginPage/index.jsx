@@ -19,13 +19,14 @@ const LoginPage = () => {
         signInWithEmailAndPassword(auth, email, senha)
         .then((userCredential) => {
             Swal.fire({
-                title: 'Cadastrado com sucesso!',
+                title: 'Logado com sucesso!',
                 text: error,
                 icon: 'sucess',
                 confirmButtonText: 'Cool'
               })
+            // eslint-disable-next-line no-unused-vars
             const user = userCredential.user;
-            console.log(user);
+            
             navigate('/chat');
         })
         .catch((error) => {
@@ -48,8 +49,8 @@ const LoginPage = () => {
         const provider = new GoogleAuthProvider();
     
         try {
+            // eslint-disable-next-line no-unused-vars
             const result = await signInWithPopup(auth, provider);
-            console.log('Resultado do Firebase:', result);
             navigate('/chat');
             
         } catch (error) {
