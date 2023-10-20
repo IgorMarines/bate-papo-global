@@ -17,8 +17,7 @@ const CadPage = () => {
         .then((userCredential) => {
             Swal.fire({
                 title: 'Cadastrado com sucesso!',
-                text: error,
-                icon: 'sucess',
+                icon: 'success',
                 confirmButtonText: 'Cool'
               })
             // eslint-disable-next-line no-unused-vars

@@ -21,7 +21,7 @@ const LoginPage = () => {
             Swal.fire({
                 title: 'Logado com sucesso!',
                 text: error,
-                icon: 'sucess',
+                icon: 'success',
                 confirmButtonText: 'Cool'
               })
             // eslint-disable-next-line no-unused-vars
