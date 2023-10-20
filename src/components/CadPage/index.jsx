@@ -29,7 +29,7 @@ const CadPage = () => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.error(errorCode, errorMessage)
-            setError('Deu ruim parça')
+            setError(`${errorCode}: ${errorMessage}`);
         });
     };
 
