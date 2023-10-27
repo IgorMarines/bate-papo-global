@@ -5,6 +5,8 @@ import { getDatabase, ref, onValue, push } from 'firebase/database';
 import { app } from '../../services/Firebase';
 import Swal from 'sweetalert2';
 
+import soundMessage from '../../assets/sfx/soundMessage.mp3'
+
 const Chat = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
@@ -12,11 +14,16 @@ const Chat = () => {
   const messagesContainerRef = useRef(null);
   const auth = getAuth(app);
 
+  const soundMessageAudio = new Audio(soundMessage);
+
+
   useEffect(() => {
     // Rolar o container para o final sempre que chatMessages for atualizado
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
+
+    soundMessageAudio.play();
   }, [chatMessages]);
 
   useEffect(() => {
