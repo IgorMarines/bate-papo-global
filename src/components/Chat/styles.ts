@@ -61,6 +61,7 @@ export const ChatMessages = styled.div`
   border: 1px solid #000;
   border-radius: 5px;
   box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+  scroll-behavior: smooth;
   div {
     margin-bottom: 10px;
   }

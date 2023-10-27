@@ -12,6 +12,7 @@ import Chat from "./components/Chat";
 
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { app } from './services/Firebase';
+import { NotFoundPage } from "./components/NotFoundPage";
 
 const auth = getAuth(app);
 
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
     path: "/chat",
     element: <Chat/>,
   },
+  {
+    path: "*", 
+    element: <NotFoundPage /> 
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

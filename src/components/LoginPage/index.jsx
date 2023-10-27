@@ -22,7 +22,7 @@ const LoginPage = () => {
                 title: 'Logado com sucesso!',
                 text: error,
                 icon: 'success',
-                confirmButtonText: 'Cool'
+                confirmButtonText: 'Ok'
               })
             // eslint-disable-next-line no-unused-vars
             const user = userCredential.user;
@@ -38,7 +38,7 @@ const LoginPage = () => {
                 title: 'Error!',
                 text: error,
                 icon: 'error',
-                confirmButtonText: 'Cool'
+                confirmButtonText: 'Ok'
               })
         });
     };

@@ -1,17 +1,24 @@
+import { useEffect, useState, useRef } from 'react';
 import * as S from './styles';
-import { useEffect, useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { getDatabase, ref, onValue, push } from 'firebase/database';
 import { app } from '../../services/Firebase';
-
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const Chat = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
-
+  const messagesContainerRef = useRef(null);
   const auth = getAuth(app);
+
+  useEffect(() => {
+    // Rolar o container para o final sempre que chatMessages for atualizado
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
   useEffect(() => {
     const db = getDatabase(app);
     const messagesRef = ref(db, 'messages');
@@ -19,7 +26,6 @@ const Chat = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
 
-      // Adicione um ouvinte para as mudanças nos dados do Realtime Database
       onValue(messagesRef, (snapshot) => {
         const messages = [];
         snapshot.forEach((childSnapshot) => {
@@ -42,14 +48,14 @@ const Chat = () => {
           'Deslogado!',
           'Você foi desconectado com sucesso!',
           'success'
-        )
+        );
       })
       .catch((error) => {
         Swal.fire(
           'Erro ao deslogar!',
           error.message,
           'error'
-        )
+        );
       });
   };
 
@@ -61,19 +67,18 @@ const Chat = () => {
       const newMessageRef = push(messagesRef, {
         user: user.displayName || user.email,
         message: message,
-        timestamp: new Date().getTime(), // Adicione um timestamp para ordenar as mensagens
+        timestamp: new Date().getTime(),
       });
-
-      setMessage(''); // Limpa o campo de input após enviar a mensagem
+      setMessage('');
     }
   };
 
-  function getRandomColor() {
-    // Gera um valor hexadecimal aleatório entre 0 e 16777215
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    // Preenche com zeros à esquerda para garantir 6 dígitos
-    return '#' + '0'.repeat(6 - randomColor.length) + randomColor;
-  }
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
     <S.Container>
@@ -86,14 +91,13 @@ const Chat = () => {
       </S.Header>
 
       <S.ChatContainer>
-        <S.ChatMessages>
+        <S.ChatMessages ref={messagesContainerRef}>
           {chatMessages.map((chatMessage, index) => (
-            <div key={index} style={{padding:'5px 0', }}>
-              
-              <strong style={{color: getRandomColor()}}>
-                  {chatMessage.user}:
-              </strong> 
-                  {chatMessage.message}
+            <div key={index} style={{ padding: '5px 0' }}>
+              <strong style={{ color: getRandomColor() }}>
+                {chatMessage.user}:
+              </strong>
+              {chatMessage.message}
             </div>
           ))}
         </S.ChatMessages>
@@ -102,6 +106,7 @@ const Chat = () => {
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Digite sua mensagem..."
           />
           <button onClick={handleSendMessage}>Enviar</button>
@@ -110,5 +115,10 @@ const Chat = () => {
     </S.Container>
   );
 };
+
+function getRandomColor() {
+  const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+  return '#' + '0'.repeat(6 - randomColor.length) + randomColor;
+}
 
 export default Chat;
