@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import  { useState } from 'react';
+import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+// import {GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
 import { app } from '../../services/Firebase';
 import * as S from './styles';
 import { Link, useNavigate } from 'react-router-dom';
@@ -27,6 +28,7 @@ const LoginPage = () => {
     const handleLogin = async () => {
         const auth = getAuth(app);
         try {
+            // eslint-disable-next-line no-unused-vars
             const userCredential = await signInWithEmailAndPassword(auth, email, senha);
             Swal.fire({
                 title: 'Logado com sucesso!',
@@ -34,7 +36,7 @@ const LoginPage = () => {
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
-            const user = userCredential.user;
+            // const user = userCredential.user;
             navigate('/chat');
         } catch (error) {
             const errorCode = error.code;
@@ -51,24 +53,29 @@ const LoginPage = () => {
         }
     };
 
-    const handleLoginGoogle = async () => {
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            navigate('/chat');
-        } catch (error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error('Erro ao autenticar com o Google:', errorCode, errorMessage);
-        }
-    };
+    // const handleLoginGoogle = async () => {
+    //     const auth = getAuth(app);
+    //     const provider = new GoogleAuthProvider();
+    //     try {
+    //         const result = await signInWithPopup(auth, provider);
+    //         navigate('/chat');
+    //     } catch (error) {
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //         console.error('Erro ao autenticar com o Google:', errorCode, errorMessage);
+    //     }
+    // };
 
     const handleForgotPassword = async () => {
         const auth = getAuth(app);
         try {
             if (email !== '') {
                 await sendPasswordResetEmail(auth, email);
+                Swal.fire({
+                    title: 'Email de Recuperação',
+                    text: 'Foi enviado um Email para recuperação de sua senha!',
+                    icon: 'success'
+                });
             } else {
                 Swal.fire({
                     title: 'Ops...',
